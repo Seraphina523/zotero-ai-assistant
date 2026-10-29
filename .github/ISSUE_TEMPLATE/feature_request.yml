@@ -1,0 +1,47 @@
+name: 功能建议
+description: 提出新功能或改进
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        欢迎提出想法！为了让建议更容易被理解和评估，请尽量描述**具体场景**而不只是「希望有 XX 功能」。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 你想解决的问题
+      description: 现在的工作流中，哪一步让你觉得繁琐或低效？
+      placeholder: |
+        例如：每次读论文都要手动把摘要复制到笔记里，还经常忘记。
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 你的建议
+      description: 你希望插件怎么做？
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 你考虑过的替代方案
+      description: 现在是怎么解决的？为什么不够好？
+    validations:
+      required: false
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: 这个建议属于哪个层面
+      options:
+        - 读懂（摘要 / 翻译 / 图表 / 批判分析）
+        - 读透（全文问答 / 引导提问）
+        - 联结（跨文献矩阵 / 文献库找 idea）
+        - 配置与体验（设置面板 / 模型管理）
+        - 其他
+    validations:
+      required: false

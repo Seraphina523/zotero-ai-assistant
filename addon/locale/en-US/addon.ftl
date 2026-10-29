@@ -1,0 +1,19 @@
+prefs-title = AI Assistant
+startup-begin = AI Assistant is loading
+startup-finish = AI Assistant is ready
+pref-provider-hint = API key / docs:
+pref-apikey-optional = Can be empty for local services
+pref-apikey-placeholder = Paste your API key
+pref-testing = Testing connection…
+pref-test-ok = Connected:
+pref-test-fail = Connection failed:
+
+dialog-ask-title = Ask about this paper
+dialog-template-label = Prompt template
+dialog-prompt-label = Prompt (editable)
+dialog-question-label = Your question
+dialog-save-template = Save as template
+dialog-template-name = Name this prompt:
+dialog-send = Send
+dialog-cancel = Cancel
+dialog-ask-window-title = Zotero AI Ask

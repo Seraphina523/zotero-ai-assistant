@@ -1,0 +1,16 @@
+section-head =
+    .label = AI 助手
+section-sidenav =
+    .tooltiptext = AI 助手：摘要、翻译、标签与问答
+menu-root =
+    .label = AI 助手
+menu-summary =
+    .label = 生成摘要
+menu-translate =
+    .label = 翻译标题/摘要
+menu-tags =
+    .label = 智能标签
+menu-matrix =
+    .label = 生成对比矩阵（多选）
+menu-idea =
+    .label = 在文献库中找 idea

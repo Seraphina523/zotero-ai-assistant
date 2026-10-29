@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules
+*.tsbuildinfo
+npm-debug.log*
+
+# Zotero plugin scaffolding
+.env
+.scaffold
+build
+logs
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/toolkit.code-snippets
+.idea
+*.swp

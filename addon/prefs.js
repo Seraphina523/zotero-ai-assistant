@@ -1,0 +1,14 @@
+pref("enable", true);
+pref("activeProfileId", "openai");
+pref("profiles", "[]");
+pref("profileOverrides", "{}");
+pref("temperature", 0.3);
+pref("maxTokens", 8192);
+pref("maxPdfChars", 60000);
+pref("contextChars", 12000);
+pref("summaryAction", "note");
+pref("summaryLength", "standard");
+pref("summaryLanguage", "zh");
+pref("translateTarget", "auto");
+pref("translateToExtra", true);
+pref("chatRegistry", "[]");

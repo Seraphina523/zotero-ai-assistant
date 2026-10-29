@@ -1,0 +1,16 @@
+section-head =
+    .label = AI Assistant
+section-sidenav =
+    .tooltiptext = AI Assistant: summary, translation, tags and Q&A
+menu-root =
+    .label = AI Assistant
+menu-summary =
+    .label = Generate Summary
+menu-translate =
+    .label = Translate Title/Abstract
+menu-tags =
+    .label = Smart Tags
+menu-matrix =
+    .label = Comparison Matrix (multi-select)
+menu-idea =
+    .label = Find ideas in my library

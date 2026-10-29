@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Zotero 官方论坛
+    url: https://forums.zotero.org/
+    about: Zotero 本身的使用问题（非本插件相关）

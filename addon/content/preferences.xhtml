@@ -1,0 +1,199 @@
+<linkset>
+  <html:link rel="localization" href="__addonRef__-preferences.ftl" />
+</linkset>
+<groupbox
+  id="zai-prefs-root"
+  onload="Zotero.__addonInstance__.hooks.onPrefsEvent('load', { window })"
+>
+  <label><html:h2 data-l10n-id="pref-title"></html:h2></label>
+
+  <html:div class="zai-pref-section" data-l10n-id="pref-section-service"></html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-profile" data-l10n-id="pref-profile"></html:label>
+    <html:div class="zai-pref-control">
+      <html:div class="zai-pref-inline">
+        <html:select id="zai-profile"></html:select>
+        <html:button id="zai-profile-duplicate" class="zai-pref-btn" type="button" data-l10n-id="pref-profile-duplicate"></html:button>
+        <html:button id="zai-profile-delete" class="zai-pref-btn" type="button" data-l10n-id="pref-profile-delete"></html:button>
+        <html:button id="zai-profile-add" class="zai-pref-btn primary" type="button" data-l10n-id="pref-profile-add"></html:button>
+      </html:div>
+      <html:div class="zai-pref-hint" id="zai-profile-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-name" data-l10n-id="pref-name"></html:label>
+    <html:div class="zai-pref-control">
+      <html:input id="zai-name" type="text" spellcheck="false" />
+      <html:div class="zai-pref-hint" data-l10n-id="pref-name-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-style" data-l10n-id="pref-style"></html:label>
+    <html:div class="zai-pref-control">
+      <html:select id="zai-style">
+        <html:option value="openai" data-l10n-id="pref-style-openai"></html:option>
+        <html:option value="anthropic" data-l10n-id="pref-style-anthropic"></html:option>
+      </html:select>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-style-hint"></html:div>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-style-openai-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-apikey" data-l10n-id="pref-apikey"></html:label>
+    <html:div class="zai-pref-control">
+      <html:div class="zai-pref-inline">
+        <html:input id="zai-apikey" type="password" autocomplete="off" spellcheck="false" />
+        <html:label class="zai-pref-check-inline">
+          <html:input id="zai-apikey-toggle" type="checkbox" />
+          <html:span data-l10n-id="pref-show-key"></html:span>
+        </html:label>
+      </html:div>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-apikey-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-baseurl" data-l10n-id="pref-baseurl"></html:label>
+    <html:div class="zai-pref-control">
+      <html:div class="zai-pref-inline">
+        <html:input id="zai-baseurl" type="text" spellcheck="false" />
+        <html:button id="zai-baseurl-reset" class="zai-pref-btn" type="button" data-l10n-id="pref-reset"></html:button>
+      </html:div>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-baseurl-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-section" data-l10n-id="pref-section-models"></html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-model" data-l10n-id="pref-model"></html:label>
+    <html:div class="zai-pref-control">
+      <html:div class="zai-pref-inline">
+        <html:input id="zai-model" type="text" spellcheck="false" />
+        <html:button id="zai-model-set" class="zai-pref-btn primary" type="button" data-l10n-id="pref-model-set"></html:button>
+      </html:div>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-model-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label"></html:label>
+    <html:div class="zai-pref-control">
+      <html:div class="zai-pref-inline">
+        <html:button id="zai-models-fetch" class="zai-pref-btn" type="button" data-l10n-id="pref-models-fetch"></html:button>
+        <html:button id="zai-models-add" class="zai-pref-btn primary" type="button" data-l10n-id="pref-models-add"></html:button>
+        <html:button id="zai-models-clear" class="zai-pref-btn" type="button" data-l10n-id="pref-models-clear"></html:button>
+        <html:button id="zai-models-test" class="zai-pref-btn" type="button" data-l10n-id="pref-models-test"></html:button>
+      </html:div>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-models-hint"></html:div>
+      <html:div id="zai-models-table"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" data-l10n-id="pref-generation"></html:label>
+    <html:div class="zai-pref-control">
+      <html:div class="zai-pref-inline">
+        <html:span class="zai-pref-hint" data-l10n-id="pref-temperature"></html:span>
+        <html:input id="zai-temperature" type="number" min="0" max="2" step="0.1" />
+        <html:span class="zai-pref-hint" data-l10n-id="pref-maxtokens"></html:span>
+        <html:input id="zai-maxtokens" type="number" min="256" max="64000" step="128" />
+      </html:div>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-generation-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-test" data-l10n-id="pref-test-label"></html:label>
+    <html:div class="zai-pref-control zai-pref-inline">
+      <html:button id="zai-test" class="zai-pref-btn primary" type="button" data-l10n-id="pref-test"></html:button>
+      <html:span id="zai-test-result" class="zai-pref-hint"></html:span>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-section" data-l10n-id="pref-section-features"></html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-summary-action" data-l10n-id="pref-summary-action"></html:label>
+    <html:div class="zai-pref-control">
+      <html:select id="zai-summary-action">
+        <html:option value="note" data-l10n-id="pref-summary-note"></html:option>
+        <html:option value="abstract" data-l10n-id="pref-summary-abstract"></html:option>
+        <html:option value="none" data-l10n-id="pref-summary-none"></html:option>
+      </html:select>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-summary-language" data-l10n-id="pref-summary-language"></html:label>
+    <html:div class="zai-pref-control">
+      <html:select id="zai-summary-language">
+        <html:option value="zh" data-l10n-id="pref-lang-zh"></html:option>
+        <html:option value="en" data-l10n-id="pref-lang-en"></html:option>
+      </html:select>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-summary-length" data-l10n-id="pref-summary-length"></html:label>
+    <html:div class="zai-pref-control">
+      <html:select id="zai-summary-length">
+        <html:option value="brief" data-l10n-id="pref-length-brief"></html:option>
+        <html:option value="standard" data-l10n-id="pref-length-standard"></html:option>
+        <html:option value="detailed" data-l10n-id="pref-length-detailed"></html:option>
+      </html:select>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-summary-length-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-translate-target" data-l10n-id="pref-translate-target"></html:label>
+    <html:div class="zai-pref-control">
+      <html:select id="zai-translate-target">
+        <html:option value="auto" data-l10n-id="pref-lang-auto"></html:option>
+        <html:option value="zh" data-l10n-id="pref-lang-zh"></html:option>
+        <html:option value="en" data-l10n-id="pref-lang-en"></html:option>
+      </html:select>
+      <html:label class="zai-pref-check-inline">
+        <html:input id="zai-translate-extra" type="checkbox" />
+        <html:span data-l10n-id="pref-translate-extra"></html:span>
+      </html:label>
+      <html:div class="zai-pref-hint" data-l10n-id="pref-translate-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-maxpdfchars" data-l10n-id="pref-maxpdfchars"></html:label>
+    <html:div class="zai-pref-control">
+      <html:input id="zai-maxpdfchars" type="number" min="5000" max="400000" step="5000" />
+      <html:div class="zai-pref-hint" data-l10n-id="pref-maxpdfchars-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-contextchars" data-l10n-id="pref-contextchars"></html:label>
+    <html:div class="zai-pref-control">
+      <html:input id="zai-contextchars" type="number" min="2000" max="60000" step="1000" />
+      <html:div class="zai-pref-hint" data-l10n-id="pref-contextchars-hint"></html:div>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-row">
+    <html:label class="zai-pref-label" for="zai-enable" data-l10n-id="pref-enable-label"></html:label>
+    <html:div class="zai-pref-control">
+      <html:label class="zai-pref-check-inline">
+        <html:input id="zai-enable" type="checkbox" />
+        <html:span data-l10n-id="pref-enable"></html:span>
+      </html:label>
+    </html:div>
+  </html:div>
+
+  <html:div class="zai-pref-footer">
+    <html:div class="zai-pref-hint" data-l10n-id="pref-footnote"></html:div>
+    <html:div class="zai-pref-hint" data-l10n-args='{"version":"__buildVersion__"}' data-l10n-id="pref-version"></html:div>
+  </html:div>
+</groupbox>

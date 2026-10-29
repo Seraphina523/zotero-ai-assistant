@@ -1,0 +1,92 @@
+.zai-pref-section {
+  font-weight: 600;
+  margin: 14px 0 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--fill-quinary, #ddd);
+  opacity: .9;
+}
+.zai-pref-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 8px 0;
+}
+.zai-pref-label {
+  flex: 0 0 148px;
+  padding-top: 5px;
+  font-size: 12.5px;
+}
+.zai-pref-control {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.zai-pref-control > input,
+.zai-pref-control > select,
+.zai-pref-inline > input[type="text"],
+.zai-pref-inline > input[type="password"],
+.zai-pref-inline > input[type="number"],
+.zai-pref-inline > select {
+  border: 1px solid var(--fill-quaternary, #c9c9c9);
+  border-radius: 5px;
+  padding: 5px 7px;
+  font: inherit;
+  font-size: 12.5px;
+  background: var(--material-background, #fff);
+  color: inherit;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.zai-pref-control > input[type="text"],
+.zai-pref-control > input[type="password"],
+.zai-pref-control > select {
+  width: 100%;
+}
+.zai-pref-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.zai-pref-inline > input[type="text"],
+.zai-pref-inline > input[type="password"] { flex: 1 1 220px; }
+.zai-pref-inline > input[type="number"] { width: 96px; }
+.zai-pref-check-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.zai-pref-hint {
+  font-size: 11px;
+  opacity: .62;
+  line-height: 1.45;
+}
+.zai-pref-hint.ok { color: #1c7a35; opacity: .95; }
+.zai-pref-hint.fail { color: #b3261e; opacity: .95; }
+.zai-pref-btn {
+  border: 1px solid var(--fill-quaternary, #c9c9c9);
+  background: var(--material-button, #f5f5f5);
+  color: inherit;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.zai-pref-btn.primary {
+  background: #2f6fdf;
+  border-color: #2f6fdf;
+  color: #fff;
+}
+.zai-pref-btn:disabled { opacity: .5; cursor: default; }
+.zai-pref-footer { margin-top: 18px; display: flex; flex-direction: column; gap: 3px; }
+@media (prefers-color-scheme: dark) {
+  .zai-pref-control > input, .zai-pref-control > select,
+  .zai-pref-inline > input, .zai-pref-inline > select {
+    background: rgba(255,255,255,.05);
+  }
+}

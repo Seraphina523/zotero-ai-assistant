@@ -1,0 +1,19 @@
+prefs-title = AI 助手
+startup-begin = AI 助手正在加载
+startup-finish = AI 助手已就绪
+pref-provider-hint = 获取 Key / 文档：
+pref-apikey-optional = 本地服务可留空
+pref-apikey-placeholder = 粘贴你的 API Key
+pref-testing = 正在测试连接…
+pref-test-ok = 连接成功：
+pref-test-fail = 连接失败：
+
+dialog-ask-title = 向这篇文献提问
+dialog-template-label = 提示词模板
+dialog-prompt-label = 提示词（可编辑）
+dialog-question-label = 你的问题
+dialog-save-template = 存为模板
+dialog-template-name = 给这个提示词起个名字：
+dialog-send = 发送
+dialog-cancel = 取消
+dialog-ask-window-title = Zotero AI 提问
