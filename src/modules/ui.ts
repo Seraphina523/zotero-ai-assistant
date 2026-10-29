@@ -33,7 +33,7 @@ import { loadModels } from "../services/modelRegistry";
 import { ChatMessage } from "../ai/providers";
 import { StreamHandlers } from "../ai/client";
 import { resolveTargetItem } from "../services/itemText";
-import { getLocaleID } from "../utils/locale";
+import { getLocaleID, getString } from "../utils/locale";
 import { getProviderId, isEnabled, resolveConfig } from "../utils/prefs";
 import {
   findProfile,
@@ -58,7 +58,7 @@ const AI_ICON = `chrome://${config.addonRef}/content/icons/ai.svg`;
  */
 function describeError(error: any): string {
   const name = error?.name || typeof error;
-  const message = error?.message || String(error || "未知错误");
+  const message = error?.message || String(error || getString("pane-unknown-error"));
   const stack: string = error?.stack || "";
   const frame = stack
     .split("\n")
@@ -247,7 +247,7 @@ const SECTION_CSS = `
     var(--zai-surface);
 }
 .zai-chat:empty::before {
-  content: "选择上方按钮生成摘要 / 翻译 / 图表解读，或在下方直接提问。";
+  content: var(--zai-empty-text, "选择上方按钮生成摘要 / 翻译 / 图表解读，或在下方直接提问。");
   opacity: .5;
   font-size: 12px;
 }
@@ -507,7 +507,7 @@ function setBusy(root: HTMLElement, busy: boolean, label?: string) {
     stop.style.display = busy ? "inline-block" : "none";
     // Reset the abort state so a fresh run can be stopped again.
     stop.disabled = false;
-    stop.textContent = "停止";
+    stop.textContent = getString("pane-stop");
   });
   root
     .querySelectorAll("button.zai-btn:not(.zai-stop)")
@@ -518,7 +518,7 @@ function setBusy(root: HTMLElement, busy: boolean, label?: string) {
   if (input) input.disabled = busy;
   const status = root.querySelector<HTMLElement>(".zai-busy");
   if (status) {
-    status.textContent = busy ? label || "正在请求模型…" : "";
+    status.textContent = busy ? label || getString("pane-busy") : "";
     status.style.display = busy ? "block" : "none";
   }
 }
@@ -655,9 +655,9 @@ function describeSaved(result: {
   savedTo?: string;
   savedNote?: Zotero.Item;
 }): string {
-  if (result.savedNote) return "已保存为该条目的子笔记";
-  if (result.savedTo === "abstract") return "已写入「摘要」字段";
-  return "未自动保存";
+  if (result.savedNote) return getString("pane-note-saved");
+  if (result.savedTo === "abstract") return getString("pane-note-abstract");
+  return getString("pane-note-none");
 }
 
 interface SectionContext {
@@ -708,18 +708,27 @@ const ACTION_CLASS: Record<ActionType, string> = {
   save: "a-save",
 };
 
-const ACTION_LABELS: Record<ActionType, string> = {
-  summary: "正在生成摘要…",
-  translate: "正在翻译…",
-  tags: "正在生成智能标签…",
-  save: "正在保存对话…",
-  retry: "正在重新生成…",
-  critique: "正在进行批判性分析…",
-  figures: "正在解读图表…",
-  questions: "正在生成引导问题…",
-  idea: "正在检索文献库…",
-  quick: "正在一键生成摘要、标签与图表解读…",
-};
+/**
+ * Progress labels for the busy indicator.
+ *
+ * A function rather than a constant: getString() requires the locale to be
+ * initialised, which happens during startup. Evaluating these at module load
+ * would throw before initLocale() runs.
+ */
+function actionLabels(): Record<ActionType, string> {
+  return {
+    summary: getString("pane-busy-summary"),
+    translate: getString("pane-busy-translate"),
+    tags: getString("pane-busy-tags"),
+    save: getString("pane-busy-save"),
+    retry: getString("pane-busy-retry"),
+    critique: getString("pane-busy-critique"),
+    figures: getString("pane-busy-figures"),
+    questions: getString("pane-busy-questions"),
+    idea: getString("pane-busy-idea"),
+    quick: getString("pane-busy-quick"),
+  };
+}
 
 async function runAction(
   action: ActionType,
@@ -727,7 +736,7 @@ async function runAction(
   extra?: { question?: string },
 ) {
   if (!isEnabled()) {
-    appendBubble(ctx.chat, "error", "插件已在设置中停用。");
+    appendBubble(ctx.chat, "error", getString("pane-disabled"));
     return;
   }
   const key = `${ctx.target.id}:${action}`;
@@ -740,7 +749,7 @@ async function runAction(
     lastActions.set(ctx.target.id, action);
   }
   ctx.stream = { cancelled: false, started: false };
-  setBusy(ctx.root, true, ACTION_LABELS[action]);
+  setBusy(ctx.root, true, actionLabels()[action]);
 
   const doc = ctx.root.ownerDocument!;
 
@@ -775,11 +784,11 @@ async function runAction(
       const result = await generateGuidedQuestions(ctx.item);
       ctx.chat.querySelector(".zai-bubble.streaming")?.remove();
       if (!result.questions.length) {
-        appendBubble(ctx.chat, "error", "未能生成引导问题，请稍后重试。");
+        appendBubble(ctx.chat, "error", getString("pane-questions-failed"));
         return;
       }
       const bubble = el(doc, "div", "zai-bubble assistant");
-      bubble.appendChild(el(doc, "div", "zai-hint", "点击下方问题开始提问："));
+      bubble.appendChild(el(doc, "div", "zai-hint", getString("pane-questions-hint")));
       const box = el(doc, "div", "zai-questions");
       for (const entry of result.questions) {
         const btn = el(doc, "button", "zai-q-btn", entry.label || entry.question);
@@ -809,12 +818,12 @@ async function runAction(
       const bubble = renderAnswer(doc, result.text, ctx.target, ctx.attachmentID);
       ctx.chat.appendChild(bubble);
       await appendSection(ctx.target, {
-        heading: "批判性分析",
+        heading: getString("pane-heading-critique"),
         body: result.text,
         accent: "#f43f5e",
-        meta: "方法学评估：研究设计、样本、测量、基线、可复现性",
+        meta: getString("pane-heading-critique-meta"),
       });
-      appendBubble(ctx.chat, "assistant", "*已追加到该条目的 AI 笔记。*");
+      appendBubble(ctx.chat, "assistant", `*${getString("pane-note-appended")}*`);
       ctx.chat.scrollTop = ctx.chat.scrollHeight;
     } else if (action === "figures") {
       const result = await interpretFigures(
@@ -826,15 +835,15 @@ async function runAction(
       const bubble = renderAnswer(doc, result.text, ctx.target, ctx.attachmentID);
       ctx.chat.appendChild(bubble);
       await appendSection(ctx.target, {
-        heading: "图表解读",
+        heading: getString("pane-heading-figures"),
         body: result.text,
         accent: "#8b5cf6",
         meta:
           result.figuresFound > 0
-            ? `提取到 ${result.figuresFound} 个图表/表格相关片段`
-            : "未提取到图表结构化信息",
+            ? getString("pane-figure-found").replace("{count}", String(result.figuresFound))
+            : getString("pane-figure-none"),
       });
-      appendBubble(ctx.chat, "assistant", "*已追加到该条目的 AI 笔记。*");
+      appendBubble(ctx.chat, "assistant", `*${getString("pane-note-appended")}*`);
       ctx.chat.scrollTop = ctx.chat.scrollHeight;
     } else if (action === "summary") {
       const result = await generateSummary(ctx.item, {
@@ -849,8 +858,10 @@ async function runAction(
         ctx.chat,
         "assistant",
         `---\n*${describeSaved(result)}；文本来源：${
-          result.source === "metadata" ? "仅元数据" : "全文"
-        }${result.truncated ? "（已截断）" : ""}*`,
+          result.source === "metadata"
+          ? getString("pane-text-source-metadata")
+          : getString("pane-text-source-full")
+        }${result.truncated ? getString("pane-text-truncated") : ""}*`,
       );
       ctx.chat.scrollTop = ctx.chat.scrollHeight;
     } else if (action === "translate") {
@@ -886,7 +897,7 @@ async function runAction(
         appendBubble(
           ctx.chat,
           "error",
-          "还没有执行过可重复的操作。请先生成摘要、标签、图表、批判性分析或问答。",
+          getString("pane-retry-empty"),
         );
         return;
       }
@@ -896,7 +907,7 @@ async function runAction(
 
       // Generation actions can simply be re-run.
       if (!lastUser && previous !== "questions") {
-        appendBubble(ctx.chat, "assistant", "*正在重新生成上一步操作…*");
+        appendBubble(ctx.chat, "assistant", `*${getString("pane-retry-running")}*`);
         busySections.delete(key);
         setBusy(ctx.root, false);
         await runAction(previous, ctx);
@@ -904,7 +915,7 @@ async function runAction(
       }
 
       if (!lastUser) {
-        appendBubble(ctx.chat, "error", "没有可重新生成的问题。");
+        appendBubble(ctx.chat, "error", getString("pane-retry-none"));
         return;
       }
 
@@ -940,7 +951,7 @@ async function runAction(
         appendBubble(
           ctx.chat,
           "assistant",
-          "*还没有生成任何内容，AI 笔记尚未创建。先点「一键生成」或「摘要」。*",
+          `*${getString("pane-note-not-found")}*`,
         );
         return;
       }
@@ -952,7 +963,7 @@ async function runAction(
         appendBubble(
           ctx.chat,
           "assistant",
-          "*已定位到该条目的 AI 笔记。所有生成结果都会自动写入它，可随时打开查看。*",
+          `*${getString("pane-note-located")}*`,
         );
       } catch (error) {
         appendBubble(ctx.chat, "error", describeError(error));
@@ -1072,13 +1083,13 @@ async function runQuickBundle(ctx: SectionContext) {
       run: async () => {
         const result = await interpretFigures(ctx.item, undefined, ctx.modelOverride);
         await appendSection(ctx.target, {
-          heading: "图表解读",
+          heading: getString("pane-heading-figures"),
           body: result.text,
           accent: "#8b5cf6",
           meta:
             result.figuresFound > 0
-              ? `提取到 ${result.figuresFound} 个图表/表格相关片段`
-              : "未提取到图表结构化信息",
+              ? getString("pane-figure-found").replace("{count}", String(result.figuresFound))
+              : getString("pane-figure-none"),
         });
         return result.text;
       },
@@ -1151,7 +1162,7 @@ async function runIdea(
   mode: SearchMode,
 ) {
   if (!isEnabled()) {
-    appendBubble(ctx.chat, "error", "插件已在设置中停用。");
+    appendBubble(ctx.chat, "error", getString("pane-disabled"));
     return;
   }
   const key = `${ctx.target.id}:idea`;
@@ -1230,7 +1241,7 @@ async function sendQuestion(
   const question = text.trim();
   if (!question) return;
   if (!isEnabled()) {
-    appendBubble(ctx.chat, "error", "插件已在设置中停用。");
+    appendBubble(ctx.chat, "error", getString("pane-disabled"));
     return;
   }
   const key = `${ctx.target.id}:ask`;
@@ -1322,6 +1333,10 @@ function renderSection(
 
   const root = el(doc, "div", "zai-root");
 
+  // The empty-state text lives in CSS (::before), which cannot call getString,
+  // so pass it through a custom property.
+  root.style.setProperty("--zai-empty-text", getString("pane-empty"));
+
   // The header line that used to sit here (version / model / budget) moved
   // into the preferences pane, so the pane starts directly with actions.  // Toolbar: grouped so nine actions stay readable in a narrow pane.
   const toolbar = el(doc, "div", "zai-toolbar");
@@ -1354,35 +1369,61 @@ function renderSection(
     toolbar.appendChild(group);
   };
 
-  addGroup("阅读与理解", [
-    makeButton("一键生成", "quick", {
+  addGroup(getString("pane-group-read"), [
+    makeButton(getString("pane-btn-quick"), "quick", {
       icon: "⚡",
-      title: "一次生成摘要、标签与图表解读（可中途停止）",
+      title: getString("pane-title-quick"),
     }),
-    makeButton("摘要", "summary", {
+    makeButton(getString("pane-btn-summary"), "summary", {
       primary: true,
       icon: "📝",
-      title: "根据全文生成结构化摘要",
+      title: getString("pane-title-summary"),
     }),
-    makeButton("翻译", "translate", { icon: "🌐", title: "翻译标题与摘要" }),
-    makeButton("标签", "tags", { icon: "🏷️", title: "生成学术标签" }),
-    makeButton("图表", "figures", { icon: "📊", title: "解读图表与表格" }),
+    makeButton(getString("pane-btn-translate"), "translate", {
+      icon: "🌐",
+      title: getString("pane-title-translate"),
+    }),
+    makeButton(getString("pane-btn-tags"), "tags", {
+      icon: "🏷️",
+      title: getString("pane-title-tags"),
+    }),
+    makeButton(getString("pane-btn-figures"), "figures", {
+      icon: "📊",
+      title: getString("pane-title-figures"),
+    }),
   ]);
 
-  addGroup("分析与发现", [
-    makeButton("批判", "critique", { icon: "🔍", title: "方法学批判性评估" }),
-    makeButton("找 idea", "idea", { icon: "✨", title: "在文献库中找研究空白" }),
+  addGroup(getString("pane-group-analyze"), [
+    makeButton(getString("pane-btn-critique"), "critique", {
+      icon: "🔍",
+      title: getString("pane-title-critique"),
+    }),
+    makeButton(getString("pane-btn-idea"), "idea", {
+      icon: "✨",
+      title: getString("pane-title-idea"),
+    }),
   ]);
 
   const toolsRow = el(doc, "div", "zai-toolbar-tools");
   toolsRow.appendChild(
-    makeButton("重新生成", "retry", { icon: "↻", title: "重复上一次操作" }),
+    makeButton(getString("pane-btn-retry"), "retry", {
+      icon: "↻",
+      title: getString("pane-title-retry"),
+    }),
   );
   toolsRow.appendChild(
-    makeButton("打开笔记", "save", { icon: "📂", title: "定位到该条目的 AI 笔记" }),
+    makeButton(getString("pane-btn-save"), "save", {
+      icon: "📂",
+      title: getString("pane-title-save"),
+    }),
   );
-  const clearBtn = el(doc, "button", "zai-btn a-clear", "清空");
-  clearBtn.title = "清空对话与 AI 笔记";
+  const clearBtn = el(
+    doc,
+    "button",
+    "zai-btn a-clear",
+    getString("pane-title-clear").split(" ")[0],
+  );
+  clearBtn.title = getString("pane-title-clear");
   clearBtn.addEventListener("click", () => {
     clearConversation(target.id);
     chats.delete(target.id);
@@ -1477,12 +1518,12 @@ function renderSection(
   );
   const inputbar = el(doc, "div", "zai-inputbar");
   const input = el(doc, "textarea", "zai-input");
-  input.placeholder = "针对这篇文献提问，例如：这篇论文的核心创新点是什么？";
+  input.placeholder = getString("pane-placeholder");
   const sendBtn = el(doc, "button", "zai-btn primary", "发送");
   sendBtn.addEventListener("click", () => {
     void sendQuestion(ctx, input.value);
   });
-  const stopBtn = el(doc, "button", "zai-btn zai-stop", "停止");
+  const stopBtn = el(doc, "button", "zai-btn zai-stop", getString("pane-stop"));
   stopBtn.style.display = "none";
   stopBtn.addEventListener("click", () => {
     ctx.stream.cancelled = true;
@@ -1493,7 +1534,7 @@ function renderSection(
       // already finished
     }
     stopBtn.disabled = true;
-    stopBtn.textContent = "已停止";
+    stopBtn.textContent = getString("pane-stopped");
   });
   input.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
@@ -1505,12 +1546,7 @@ function renderSection(
   inputbar.appendChild(sendBtn);
   inputbar.appendChild(stopBtn);
 
-  const hint = el(
-    doc,
-    "div",
-    "zai-hint",
-    "问答会检索该条目的 PDF/EPUB 全文（首次读取稍慢）。回答中的页码可点击跳转到阅读器。Enter 发送，Shift+Enter 换行。",
-  );
+  const hint = el(doc, "div", "zai-hint", getString("pane-hint"));
 
   root.append(toolbar, chat, busyLine, modelBar, inputbar, hint);
   body.appendChild(root);
