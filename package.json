@@ -2,7 +2,19 @@
   "name": "zotero-ai-assistant",
   "type": "module",
   "version": "0.1.0",
-  "description": "AI assistant for Zotero: summaries, translation, PDF Q&A, auto-tagging with OpenAI/Claude/DeepSeek/GLM/Kimi/custom endpoints.",
+  "description": "AI assistant for Zotero: summaries, translation, figure interpretation, critical appraisal, full-text Q&A with page citations, and idea discovery across your library.",
+  "keywords": [
+    "zotero",
+    "zotero-plugin",
+    "ai",
+    "llm",
+    "paper-summary",
+    "pdf-qa",
+    "research",
+    "openai",
+    "claude",
+    "deepseek"
+  ],
   "config": {
     "addonName": "Zotero AI Assistant",
     "addonID": "zotero-ai-assistant@local",
@@ -12,13 +24,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourname/zotero-ai-assistant.git"
+    "url": "git+https://github.com/Seraphina523/zotero-ai-assistant.git"
   },
-  "author": "Zotero AI Assistant contributors",
+  "author": "Seraphina523",
   "bugs": {
-    "url": "https://github.com/yourname/zotero-ai-assistant/issues"
+    "url": "https://github.com/Seraphina523/zotero-ai-assistant/issues"
   },
-  "homepage": "https://github.com/yourname/zotero-ai-assistant",
+  "homepage": "https://github.com/Seraphina523/zotero-ai-assistant#readme",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",
